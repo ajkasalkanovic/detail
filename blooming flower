@@ -1,0 +1,40 @@
+import turtle
+import colorsys
+
+# Podešavanje ekrana
+screen = turtle.Screen()
+screen.bgcolor("black")
+screen.setup(width=800, height=800)
+screen.tracer(10) # Ubrzava crtanje, ali ostavlja animaciju vidljivom
+
+t = turtle.Turtle()
+t.speed(0)
+t.width(2)
+t.hideturtle()
+
+def draw_bloom():
+    h = 0 # Početna vrijednost za boju (hue)
+    
+    # Prva petlja određuje koliko će se cvijet "raširiti"
+    for i in range(200):
+        # Generisanje boja koristeći HSV sistem za glatke prelaze (duga)
+        color = colorsys.hsv_to_rgb(h, 1, 1)
+        t.pencolor(color)
+        h += 0.005
+        
+        # Crtanje latica koje se postepeno rotiraju i šire
+        t.right(59) # Ugao koji stvara spiralni efekat cvijeta
+        t.circle(i * 0.5, 100) # Dužina luka latice raste sa i
+        
+        t.left(100)
+        t.circle(i * 0.5, 100)
+        
+        # Povremeno ažuriranje ekrana da bi se vidio progres (cvjetanje)
+        if i % 2 == 0:
+            screen.update()
+
+# Pokretanje animacije
+draw_bloom()
+
+# Drži prozor otvorenim dok ne klikneš
+screen.exitonclick()
