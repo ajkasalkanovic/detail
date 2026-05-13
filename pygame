@@ -1,0 +1,64 @@
+import pygame
+import random
+
+# Initialize Pygame
+pygame.init()
+
+# Screen dimensions
+WIDTH, HEIGHT = 800, 600
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Moving Characters Animation")
+
+# Colors
+BLACK = (0, 0, 0)
+
+class Character:
+    def __init__(self):
+        self.radius = random.randint(15, 30)
+        self.x = random.randint(self.radius, WIDTH - self.radius)
+        self.y = random.randint(self.radius, HEIGHT - self.radius)
+        self.color = (random.randint(50, 255), random.randint(50, 255), random.randint(50, 255))
+        # Speed and direction (velocity)
+        self.vx = random.uniform(-3, 3)
+        self.vy = random.uniform(-3, 3)
+
+    def move(self):
+        # Update position
+        self.x += self.vx
+        self.y += self.vy
+
+        # Bounce off walls
+        if self.x - self.radius < 0 or self.x + self.radius > WIDTH:
+            self.vx *= -1
+        if self.y - self.radius < 0 or self.y + self.radius > HEIGHT:
+            self.vy *= -1
+
+    def draw(self):
+        pygame.draw.circle(screen, self.color, (int(self.x), int(self.y)), self.radius)
+
+# Create a list of characters
+characters = [Character() for _ in range(15)]
+
+# Main Loop
+running = True
+clock = pygame.time.Clock()
+
+while running:
+    # 1. Check for events (like clicking 'X' to close)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # 2. Update logic (move characters)
+    for char in characters:
+        char.move()
+
+    # 3. Drawing
+    screen.fill(BLACK)  # Clear the screen first
+    for char in characters:
+        char.draw()
+
+    pygame.display.flip() # Update the full display Surface to the screen
+    clock.tick(60)        # Limit to 60 frames per second
+
+pygame.quit()
